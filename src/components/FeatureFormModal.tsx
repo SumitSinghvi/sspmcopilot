@@ -1,9 +1,9 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useStoreModal } from "./use-store-modal";
+// import { useStoreModal } from "./use-store-modal";
 import { Modal } from "./ui/Modal";
 import {
   Form,
@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { Input } from "./ui/input";
+// import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -26,7 +26,7 @@ const formSchema = z.object({
 });
 
 export const FeatureFormModal = ({ storeModal }: { storeModal: any }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

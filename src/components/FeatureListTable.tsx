@@ -7,10 +7,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { FeatureFormModal } from "./FeatureFormModal";
-import { useState } from "react";
+// import { Input } from "./ui/input";
+// import { Button } from "./ui/button";
+// import { FeatureFormModal } from "./FeatureFormModal";
+// import { useState } from "react";
 
 export default function FeatureListTable({ data }: { data: any }) {
 
