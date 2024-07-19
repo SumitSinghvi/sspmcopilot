@@ -20,16 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { postData } from "@/lib/utils";
+import { updateData } from "@/lib/utils";
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1),
-  functions: z.string().min(1),
-  tags: z.string().min(1),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  functions: z.string().optional(),
+  tags: z.string().optional(),
 });
 
-export const FeatureFormModal = ({ storeModal }: { storeModal: any }) => {
+export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }) => {
   const [loading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,14 +47,14 @@ export const FeatureFormModal = ({ storeModal }: { storeModal: any }) => {
       Description: data.description,
       Archive: false
     }
-    await postData(form_submit_data);
+    await updateData(form_submit_data, id);
     storeModal.onClose();
     window.location.reload();
   };
   return (
     <Modal
-      title="Add new feature"
-      description="Please define your feature in as much detail as possible"
+      title="Update here"
+      description="Change the fields"
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
