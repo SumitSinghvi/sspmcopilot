@@ -43,6 +43,7 @@ export const FeatureFormModal = ({ storeModal }: { storeModal: any }) => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const form_submit_data = {
+      Name: data.name,
       Title: data.tags,
       Description: data.description,
       Archive: false

@@ -5,41 +5,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import gpt from '../assets/gpt.svg';
+import gpt from "../assets/gpt.svg";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowUp, ArrowRight } from "lucide-react";
-import axios from 'axios';
-import { generateGPT } from "@/lib/utils";
+import Chat from "../components/chat";
 
-export default function Playground() {
-  const [message, setMessage] = useState<any>();
+export default function Playground({ data }: { data: any }) {
   const [model, setModel] = useState<any>();
-  const [response, setResponse] = useState<any>();
-  const [instructions, setInstruction] = useState('You’re the product manager Copilot for Social Snowball. You help Geetansh write scopes of a feature, understand the testing scenarios of a feature/sub-feature/bug fix or help them with anything related to the product side of things in Social Snowball.');
-  const handleSubmit = () => {
-      const data = {
-        message,
-        model,
-        instructions
-      }
-      const result = generateGPT(data);
-      setResponse(result);
-  }
+  const [instructions, setInstruction] = useState(
+    "You’re the product manager Copilot for Social Snowball. You help Geetansh write scopes of a feature, understand the testing scenarios of a feature/sub-feature/bug fix or help them with anything related to the product side of things in Social Snowball."
+  );
+  const handleChange = (value: any) => {
+    setModel(value);
+  };
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const handleSelect = (item: any) => {
+    const { _id, Archive, __v, ...filteredObjects } = item;
+    const filteredObjectStr = JSON.stringify(filteredObjects);
+    if (selectedItems.includes(filteredObjectStr)) {
+      setSelectedItems(
+        selectedItems.filter((prevItem) => prevItem !== filteredObjectStr)
+      );
+    } else {
+      setSelectedItems([...selectedItems, filteredObjectStr]);
+    }
+  };
+  // console.log(instructions + selectedItems)
+  // console.log(selectedItems)
   return (
     <div className="flex flex-1">
       <div className="px-8 py-4">
         <div className="flex gap-1 p-2">
-          <img src={gpt} alt="gpt" /> 
-          <h1>PM Colpilot</h1>
+          <img src={gpt} alt="gpt" />
+          <h1>PM Copilot</h1>
         </div>
         <h1 className="text-gray-400 p-2">Instructions</h1>
-        <Textarea onChange={(e) => setInstruction(e.target.value)} value={instructions} className="border-white h-auto min-h-60 w-[256px]"/>
+        <Textarea
+          onChange={(e) => setInstruction(e.target.value)}
+          value={instructions + selectedItems}
+          className="border-white h-auto min-h-60 w-[256px] outline-none resize-none"
+        />
         <h1 className="p-2">Model</h1>
-        <Select value="gpt-4o">
+        <Select value={model} onValueChange={handleChange}>
           <SelectTrigger className="text-white">
-            <SelectValue placeholder="Select an option " />
+            <SelectValue placeholder="Select model" />
           </SelectTrigger>
           <SelectContent className="text-white">
             <SelectItem value="Feature">gpt-3.5 turbo</SelectItem>
@@ -47,16 +56,23 @@ export default function Playground() {
             <SelectItem value="Func">gpt-4o</SelectItem>
           </SelectContent>
         </Select>
+        {data.map((item: any, index: any) => {
+          const { _id, Archive, __v, ...filteredObjects } = item;
+          const filteredObjectStr = JSON.stringify(filteredObjects);
+          return (
+            <div key={index}>
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(filteredObjectStr)}
+                onChange={() => handleSelect(item)}
+              />
+              <label>{item.Name}</label>
+            </div>
+          );
+        })}
       </div>
-      <div className="px-12 text-sm border-l py-8 h-screen flex flex-col flex-1 justify-between">
-        <h1>THREAD</h1>
-        <div>
-          <div className="w-full h-28 flex flex-col items-center gap-3">
-            <Textarea placeholder="Type a message..." onChange={(e) => setMessage(e.target.value)} className="outline-none bg-gray-500 border-none flex-1 resize-none"/>
-            <Button className="bg-[#1A7F64] text-white w-full p-3 text-md flex items-center gap-3 justify-between">Run<ArrowRight size={20} /></Button>
-          </div>
-          <p className="text-gray-500 text-center">This is your playground, feel free to ask any question you want.</p>
-        </div>
+      <div className="px-12 text-sm border-l py-8 h-screen flex flex-col flex-1">
+        <Chat instructions={instructions + selectedItems} model={model} />
       </div>
     </div>
   );

@@ -3,25 +3,9 @@ import FeatureListTable from "@/components/FeatureListTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStoreModal } from "@/components/use-store-modal";
-import { getData } from "@/lib/utils";
-import { useEffect, useState } from "react";
 
-export default function FeatureList() {
+export default function FeatureList({data} : {data : any}) {
   const storeModal = useStoreModal();
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getData();
-        setData(result.filter((item: any) => item.Archive == false));
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <div className="flex flex-col w-[1350px] h-screen pl-[118px] pt-[88px]">
       <FeatureFormModal storeModal={storeModal} />

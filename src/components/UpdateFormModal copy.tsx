@@ -40,9 +40,9 @@ export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }
       tags: "",
     },
   });
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const form_submit_data = {
+      Name: data.name,
       Title: data.tags,
       Description: data.description,
       Archive: false
@@ -61,6 +61,7 @@ export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }
       <div>
         <div className="space-y-4 py-2 pb-4">
           <Form {...form}>
+            {id}
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}

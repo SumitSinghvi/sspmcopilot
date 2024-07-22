@@ -6,23 +6,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { updateData } from "@/lib/utils";
 import { UpdateFormModal } from "./UpdateFormModal copy";
-import { useStoreModal } from "./use-store-modal";
+import { useUStoreModal } from "./use-Ustore-modal";
+import { useState } from "react";
 // import { Input } from "./ui/input";
 // import { Button } from "./ui/button";
 // import { FeatureFormModal } from "./FeatureFormModal";
 // import { useState } from "react";
 
 export default function FeatureListTable({ data }: { data: any }) {
-  const storeModal = useStoreModal();
+  const UstoreModal = useUStoreModal();
+  const [id, setId] = useState();
 
   return (
     <div>
+      <UpdateFormModal storeModal={UstoreModal} id={id}/>
       <Table>
         <TableHeader>
           <TableRow>
@@ -30,6 +32,7 @@ export default function FeatureListTable({ data }: { data: any }) {
               ID's
             </TableHead>
             <TableHead className="w-[200px] text-[14px]">Title</TableHead>
+            <TableHead className="w-[200px] text-[14px]">Type</TableHead>
             <TableHead className="text-[14px]">Description</TableHead>
           </TableRow>
         </TableHeader>
@@ -40,7 +43,7 @@ export default function FeatureListTable({ data }: { data: any }) {
                 <TableCell className="text-[14px] uppercase">
                   {item._id.slice(-4)}
                 </TableCell>
-                <UpdateFormModal storeModal={storeModal} id={item._id}/>
+                <TableCell className="text-[14px] capitalize">{item.Name}</TableCell>
                 <TableCell className="text-[14px] capitalize">{item.Title}</TableCell>
                 <TableCell className="text-[14px]">
                   {item.Description}
@@ -55,7 +58,7 @@ export default function FeatureListTable({ data }: { data: any }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={storeModal.onOpen}>
+                    <DropdownMenuItem onClick={() => {setId(item._id); UstoreModal.onOpen();}}>
                       <Edit className="mr-2 h-4 w-4" />
                       Update
                     </DropdownMenuItem>
