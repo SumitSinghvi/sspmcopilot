@@ -94,7 +94,6 @@ export default function Chat({instructions, model} : {instructions: any, model: 
       eventSource.onmessage = function (event) {
         // Parse the event data, which is a JSON string
         const parsedData = JSON.parse(event.data);
-
         // Check if the last message in the chat history is from the assistant
         setChatHistory((prevChatHistory) => {
           const newChatHistory = [...prevChatHistory];
@@ -102,10 +101,12 @@ export default function Chat({instructions, model} : {instructions: any, model: 
             newChatHistory.length > 0 &&
             newChatHistory[newChatHistory.length - 1].role === "assistant"
           ) {
-            // If so, append the new chunk to the existing assistant message content
-            newChatHistory[newChatHistory.length - 1].content += parsedData;
+            // Create a new object for the last message to ensure state update
+            newChatHistory[newChatHistory.length - 1] = {
+              ...newChatHistory[newChatHistory.length - 1],
+              content: newChatHistory[newChatHistory.length - 1].content + parsedData
+            };
           } else {
-            // Otherwise, add a new assistant message to the chat history
             newChatHistory.push({ role: "assistant", content: parsedData });
           }
           return newChatHistory;

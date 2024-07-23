@@ -20,11 +20,11 @@ import { useState } from "react";
 
 export default function FeatureListTable({ data }: { data: any }) {
   const UstoreModal = useUStoreModal();
-  const [id, setId] = useState();
+  const [item, setItem] = useState();
 
   return (
     <div>
-      <UpdateFormModal storeModal={UstoreModal} id={id}/>
+      <UpdateFormModal storeModal={UstoreModal} item={item}/>
       <Table>
         <TableHeader>
           <TableRow>
@@ -48,7 +48,7 @@ export default function FeatureListTable({ data }: { data: any }) {
                 <TableCell className="text-[14px]">
                   {item.Description}
                 </TableCell>
-                <div className="flex justify-center items-center">
+                <div className="flex justify-center pt-2 items-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                   <Button variant="ghost" className="h-8 w-8 p-0">
@@ -58,7 +58,7 @@ export default function FeatureListTable({ data }: { data: any }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => {setId(item._id); UstoreModal.onOpen();}}>
+                    <DropdownMenuItem onClick={() => {setItem(item); UstoreModal.onOpen();}}>
                       <Edit className="mr-2 h-4 w-4" />
                       Update
                     </DropdownMenuItem>

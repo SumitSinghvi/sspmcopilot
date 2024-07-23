@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "./ui/Modal";
 import {
@@ -29,7 +29,7 @@ const formSchema = z.object({
   tags: z.string().optional(),
 });
 
-export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }) => {
+export const UpdateFormModal = ({ storeModal, item }: { storeModal: any, item: any }) => {
   const [loading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,6 +40,16 @@ export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }
       tags: "",
     },
   });
+  useEffect(() => {
+    if (item) {
+      form.reset({
+        name: item.Name || "",
+        description: item.Description || "",
+        functions: "",
+        tags: item.Title || "",
+      });
+    }
+  }, [item, form]);
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const form_submit_data = {
       Name: data.name,
@@ -47,9 +57,9 @@ export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }
       Description: data.description,
       Archive: false
     }
-    await updateData(form_submit_data, id);
+    await updateData(form_submit_data, item._id);
     storeModal.onClose();
-    window.location.reload();
+    location.reload();
   };
   return (
     <Modal
@@ -61,7 +71,6 @@ export const UpdateFormModal = ({ storeModal, id }: { storeModal: any, id: any }
       <div>
         <div className="space-y-4 py-2 pb-4">
           <Form {...form}>
-            {id}
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}

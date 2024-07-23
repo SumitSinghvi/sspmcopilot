@@ -11,7 +11,7 @@ import { useState } from "react";
 import Chat from "../components/chat";
 
 export default function Playground({ data }: { data: any }) {
-  const [model, setModel] = useState<any>();
+  const [model, setModel] = useState<any>('gpt-4o-mini');
   const [instructions, setInstruction] = useState(
     "You’re the product manager Copilot for Social Snowball. You help Geetansh write scopes of a feature, understand the testing scenarios of a feature/sub-feature/bug fix or help them with anything related to the product side of things in Social Snowball."
   );
@@ -30,8 +30,7 @@ export default function Playground({ data }: { data: any }) {
       setSelectedItems([...selectedItems, filteredObjectStr]);
     }
   };
-  // console.log(instructions + selectedItems)
-  // console.log(selectedItems)
+  console.log(model);
   return (
     <div className="flex flex-1">
       <div className="px-8 py-4">
@@ -51,11 +50,13 @@ export default function Playground({ data }: { data: any }) {
             <SelectValue placeholder="Select model" />
           </SelectTrigger>
           <SelectContent className="text-white">
-            <SelectItem value="Feature">gpt-3.5 turbo</SelectItem>
-            <SelectItem value="Sub-Feature">gpt-4 turbo</SelectItem>
-            <SelectItem value="Func">gpt-4o</SelectItem>
+            <SelectItem value="gpt-4o-mini">gpt-4o-mini</SelectItem>
+            <SelectItem value="gpt-4o">gpt-4o</SelectItem>
+            <SelectItem value="gpt-4-turbo">gpt-4-turbo</SelectItem>
+            <SelectItem value="gpt-3.5-turbo">gpt-3.5-turbo</SelectItem>
           </SelectContent>
         </Select>
+        <hr className="p-2"/>
         {data.map((item: any, index: any) => {
           const { _id, Archive, __v, ...filteredObjects } = item;
           const filteredObjectStr = JSON.stringify(filteredObjects);
@@ -65,8 +66,8 @@ export default function Playground({ data }: { data: any }) {
                 type="checkbox"
                 checked={selectedItems.includes(filteredObjectStr)}
                 onChange={() => handleSelect(item)}
-              />
-              <label>{item.Name}</label>
+                />
+                <label className="p-2">{item.Name}</label>
             </div>
           );
         })}
