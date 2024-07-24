@@ -4,6 +4,7 @@ import dataSource from "../assets/SVG.svg";
 import playGround from "../assets/SVG (1).svg";
 import Archive from "../assets/SVG (2).svg";
 import { useNavigate } from "react-router-dom";
+import { UserButton } from "@clerk/clerk-react";
 
 export default function SidePanel() {
   const navigate = useNavigate();
@@ -11,8 +12,11 @@ export default function SidePanel() {
   const currentURL = url.split("/")[3];
   return (
     <div className="w-[247px] h-screen border-r">
-      <h1 className="py-2 px-4">
+      <h1 className="py-2 px-4 flex justify-between">
         <i className="playfairfont font-bold">yo babes</i>
+        <div>
+          <UserButton />
+        </div>
       </h1>
       <div className="flex flex-col gap-[4px] p-[8px]">
         <Button

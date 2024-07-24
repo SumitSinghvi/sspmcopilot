@@ -30,7 +30,6 @@ export default function Playground({ data }: { data: any }) {
       setSelectedItems([...selectedItems, filteredObjectStr]);
     }
   };
-  console.log(model);
   return (
     <div className="flex flex-1">
       <div className="px-8 py-4">
@@ -72,8 +71,10 @@ export default function Playground({ data }: { data: any }) {
           );
         })}
       </div>
-      <div className="px-12 text-sm border-l py-8 h-screen flex flex-col flex-1">
+      <div className="px-12 overflow-y-auto text-sm border-l py-8 h-screen flex flex-col flex-1"
+      >
         <Chat instructions={instructions + selectedItems} model={model} />
+      
       </div>
     </div>
   );

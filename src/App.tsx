@@ -6,6 +6,8 @@ import SidePanel from './components/SidePanel';
 import { ThemeProvider } from "@/components/theme-provider"
 import { useEffect, useState } from 'react';
 import { getData } from './lib/utils';
+import { SignIn, SignUp } from '@clerk/clerk-react';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   const [archivedData, setArchivedData] = useState<any>(null);
@@ -28,11 +30,18 @@ export default function App() {
       <div className='flex'>
         <BrowserRouter>
         <SidePanel />
-        <Routes>
+        {/* <Routes>
           <Route path="/" element={<FeatureList data={unArchivedData} />} />
           <Route path="/playground" element={<Playground data={unArchivedData}/>} />
           <Route path="/archive" element={<Archive data={archivedData}/>} />
-        </Routes>
+        </Routes> */}
+        <Routes>
+              <Route path="/sign-in" element={<div className='flex justify-center items-center w-screen'><SignIn /></div>} />
+              <Route path="/sign-up" element={<div className='flex justify-center items-center w-screen'><SignUp /></div>} />
+              <Route path="/" element={<ProtectedRoute><FeatureList data={unArchivedData} /></ProtectedRoute>} />
+              <Route path="/playground" element={<ProtectedRoute><Playground data={unArchivedData}/></ProtectedRoute>} />
+              <Route path="/archive" element={<ProtectedRoute><Archive data={archivedData}/></ProtectedRoute>} />
+            </Routes>
         </BrowserRouter>   
       </div>
     </ThemeProvider>

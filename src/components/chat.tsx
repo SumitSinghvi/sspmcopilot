@@ -16,7 +16,7 @@ type MessageProps = {
 };
 
 const UserMessage = ({ text }: { text: string }) => {
-  return <div className={styles.userMessage} >{text}</div>;
+  return <div className={styles.userMessage}>{text}</div>;
 };
 
 const AssistantMessage = ({ text }: { text: string }) => {
@@ -58,19 +58,24 @@ const Message = ({ role, text }: MessageProps) => {
   }
 };
 
-export default function Chat({instructions, model} : {instructions: any, model: any}) {
+export default function Chat({
+  instructions,
+  model,
+}: {
+  instructions: any;
+  model: any;
+}) {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([
     { role: "system", content: instructions },
   ]);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [chatHistory]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [chatHistory]);
 
   const sendMessage = async (message: any) => {
     // Append user message to chat history
@@ -91,7 +96,9 @@ export default function Chat({instructions, model} : {instructions: any, model: 
     if (data.success) {
       // Open a connection to receive streamed responses
       const eventSource = new EventSource(
-        `${import.meta.env.VITE_BACKEND_URL}/api/generate?endpoint=stream&model=${model}`
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/generate?endpoint=stream&model=${model}`
       );
       eventSource.onmessage = function (event) {
         // Parse the event data, which is a JSON string
@@ -106,7 +113,8 @@ export default function Chat({instructions, model} : {instructions: any, model: 
             // Create a new object for the last message to ensure state update
             newChatHistory[newChatHistory.length - 1] = {
               ...newChatHistory[newChatHistory.length - 1],
-              content: newChatHistory[newChatHistory.length - 1].content + parsedData
+              content:
+                newChatHistory[newChatHistory.length - 1].content + parsedData,
             };
           } else {
             newChatHistory.push({ role: "assistant", content: parsedData });
@@ -122,9 +130,7 @@ export default function Chat({instructions, model} : {instructions: any, model: 
 
   const clearChat = async () => {
     // Clear the chat history in the client state
-    setChatHistory([
-      { role: "system", content: instructions },
-    ]);
+    setChatHistory([{ role: "system", content: instructions }]);
 
     // Reset the chat history on the server
     await fetch(
@@ -143,7 +149,7 @@ export default function Chat({instructions, model} : {instructions: any, model: 
   return (
     <div className="flex-1 flex flex-col">
       <h1>Thread</h1>
-      <div className={styles.chatContainer} ref={chatContainerRef}>
+      <div className={styles.chatContainer} ref={messagesEndRef}>
         {chatHistory.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.content} />
         ))}
@@ -159,10 +165,7 @@ export default function Chat({instructions, model} : {instructions: any, model: 
             onChange={(e) => setMessage(e.target.value)}
           ></Textarea>
           <div className="flex gap-3 items-center absolute bottom-3 right-3">
-          <button
-              type="button"
-              onClick={clearChat}
-            >
+            <button type="button" onClick={clearChat}>
               <LuPaintbrush size={25} />
             </button>
             <Button
