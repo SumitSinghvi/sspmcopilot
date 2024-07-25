@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children }: { children: any}) {
   }
 
   if (!isSignedIn) {
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/sign-up" />;
   }
 
   return children;

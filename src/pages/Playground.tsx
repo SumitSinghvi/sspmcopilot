@@ -32,7 +32,7 @@ export default function Playground({ data }: { data: any }) {
   };
   return (
     <div className="flex flex-1">
-      <div className="px-8 py-4">
+      <div className="px-8 py-4 max-w-[400px]">
         <div className="flex gap-1 p-2">
           <img src={gpt} alt="gpt" />
           <h1>PM Copilot</h1>
